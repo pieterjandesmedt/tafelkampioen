@@ -1,5 +1,8 @@
 <template>
 	<section class="hero is-fullheight">
+		<div v-if="persons.length" class="has-text-right m-3">
+			<button class="button is-small is-white" @click="toSettings">⚙️ <span class="is-hidden-touch">&nbsp;Instellingen</span></button>
+		</div>
 		<div class="hero-body">
 			<div class="container has-text-centered mb-6">
 				<h1 class="is-size-2 is-hidden-desktop">🏆</h1>
@@ -86,6 +89,9 @@ export default {
 		},
 		exportData() {
 			exportToJsonFile(this.$store.state);
+		},
+		toSettings() {
+			this.$router.push({ path: '/settings' });
 		},
 	},
 };

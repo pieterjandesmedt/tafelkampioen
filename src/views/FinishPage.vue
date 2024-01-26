@@ -1,13 +1,13 @@
 <template>
 	<section class="hero is-fullheight">
-		<div class="logout has-text-left">
+		<div class="has-text-left m-3">
 			<button class="button is-small" @click="toSelect">&larr; <span class="is-hidden-touch">&nbsp;Terug</span></button>
 		</div>
 		<div class="hero-body has-text-centered">
 			<div class="finish container">
 				<h1 class="is-size-2">Super goed gedaan! {{ emojis[Math.floor(Math.random() * emojis.length)] }}</h1>
 				<h4 class="is-size-4">Deze tafels ken jij perfect, {{ currentPerson }}:</h4>
-				<p class="has-bottom-margin">
+				<p class="mb-3">
 					{{ perfect.join(', ') }}
 				</p>
 				<button class="button is-primary" @click="toSelect">Oefen andere tafels</button>

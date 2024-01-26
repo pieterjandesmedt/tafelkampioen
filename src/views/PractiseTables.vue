@@ -2,7 +2,7 @@
 	<section class="hero is-medium">
 		<div class="columns is-mobile">
 			<div class="column is-narrow-touch">
-				<div class="logout has-text-left">
+				<div class="has-text-left m-3">
 					<button class="button is-small" @click="toSelect">&larr; <span class="is-hidden-touch">&nbsp;Terug</span></button>
 				</div>
 			</div>
@@ -29,7 +29,7 @@
 							/>
 						</div>
 						<div class="control">
-							<input type="submit" class="button is-info is-size-2 px-3" value="→" />
+							<input type="submit" class="button is-info is-size-2" value="→" />
 						</div>
 					</div>
 				</form>

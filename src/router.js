@@ -4,6 +4,7 @@ import PractiseTables from './views/PractiseTables.vue';
 import ChoosePlayer from './views/ChoosePlayer.vue';
 import FinishPage from './views/FinishPage.vue';
 import SelectTables from './views/SelectTables.vue';
+import SettingsPage from './views/SettingsPage.vue';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
 			path: '/finish',
 			name: 'finish',
 			component: FinishPage,
+		},
+		{
+			path: '/settings',
+			name: 'settings',
+			component: SettingsPage,
 		},
 	],
 });

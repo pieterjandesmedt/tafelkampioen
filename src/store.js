@@ -71,6 +71,14 @@ export default new Vuex.Store({
 				});
 			}
 		},
+		removePerson(state, value) {
+			if (state.currentPerson === value) state.currentPerson = ''
+			const personIndex = state.persons.findIndex(p => p === value);
+			if (personIndex !== -1) {
+				state.persons.splice(personIndex, 1);
+				Vue.delete(state.progress, value)
+			}
+		},
 		setPerson(state, value) {
 			if (state.persons.find(p => p === value)) {
 				state.currentPerson = value;
@@ -132,6 +140,9 @@ export default new Vuex.Store({
 		},
 		addPerson({ commit }, value) {
 			commit('addPerson', value);
+		},
+		removePerson({ commit }, value) {
+			commit('removePerson', value);
 		},
 		setPerson({ commit }, value) {
 			commit('setPerson', value);

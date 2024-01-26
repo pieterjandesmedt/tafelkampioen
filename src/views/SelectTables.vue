@@ -1,12 +1,12 @@
 <template>
 	<section class="hero is-fullheight">
-		<div class="logout has-text-left">
+		<div class="has-text-left m-3">
 			<button class="button is-small" @click="logout">&larr; <span class="is-hidden-touch">&nbsp;Iemand anders</span></button>
 		</div>
 		<div class="hero-body p-3">
 			<div class="container has-text-centered">
 				<h1 class="is-size-3">Word jij Tafelkampioen, {{ currentPerson }}?</h1>
-				<div class="info has-bottom-margin">
+				<div class="info mb-3">
 					<!--star-rating
 						:increment="0.5"
 						:star-size="32"
@@ -22,14 +22,14 @@
 						{{ encouragement }}
 					</p>
 				</div>
-				<h4 class="is-size-4 has-top-margin">Welke tafels wil je oefenen?</h4>
+				<h4 class="is-size-4 mt-3">Welke tafels wil je oefenen?</h4>
 				<div class="buttons is-centered">
 					<button class="button" @click="selectNone">Geen</button>
 					<button class="button" @click="selectUpTo10">2 tot 10</button>
 					<button class="button" @click="select11To20">11 tot 20</button>
 					<button class="button" @click="selectAll">Allemaal</button>
 				</div>
-				<div class="list-table">
+				<div class="list-table mb-3">
 					<p>Of kies er zelf een paar:</p>
 					<div class="columns is-mobile">
 						<ul class="column is-narrow">
@@ -87,7 +87,7 @@
 						</ul>
 					</div>
 				</div>
-				<div class="start has-top-margin">
+				<div class="start mb-3">
 					<button
 						class="button is-primary"
 						:disabled="selectedTables.length === 0"
