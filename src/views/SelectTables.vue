@@ -15,8 +15,8 @@
 						:show-rating="false"
 					></star-rating-->
 					<p v-if="points > 0" class="mt-3">
-						Je hebt 🏆 {{ points * 10 }} punten verdiend.
-						<span v-if="medianStopwatch !== 10000">Je vindt het antwoord
+						Je hebt 🏆 {{ points }} punten verdiend.
+						<span v-if="medianStopwatch !== 10000">Je weet het antwoord
 						gemiddeld binnen de ⏱
 						{{ Math.round(medianStopwatch / 100.0) / 10.0 }} seconden.</span>
 						{{ encouragement }}
@@ -51,7 +51,7 @@
 										:increment="0.5"
 										:star-size="12"
 										read-only
-										:rating="score(item)"
+										:rating="stars(item)"
 										:show-rating="false"
 									>
 									</star-rating>
@@ -75,7 +75,7 @@
 										:increment="0.5"
 										:star-size="12"
 										read-only
-										:rating="score(item + 10)"
+										:rating="stars(item + 10)"
 										:show-rating="false"
 									>
 									</star-rating>
@@ -113,7 +113,7 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['values', 'medianStopwatch']),
+		...mapGetters(['values', 'medianStopwatch', 'score']),
 		...mapState(['currentPerson']),
 		totalScore() {
 			const buckets = this.values.map((v) => v.bucket);
@@ -122,7 +122,8 @@ export default {
 				: 0;
 		},
 		points() {
-			return this.values.map((v) => v.bucket).reduce((p, c) => p + c, 0);
+			return this.score;
+			// return this.values.map((v) => v.bucket).reduce((p, c) => p + c, 0);
 		},
 		encouragement() {
 			const encouragements = [
@@ -138,20 +139,17 @@ export default {
 				'Super!',
 				'Prima bezig!',
 				'Hou vol!',
-				'Je rockt!',
 				'Fantastisch!',
-				'Niet stoppen!',
+				'Je bent niet te stoppen!',
 				'Klasse!',
 				'Ga ervoor!',
 				'Perfect!',
 				'Je maakt indruk!',
 				'Topprestatie!',
-				'Houd vol!',
 				'Geweldig gedaan!',
 				'Ga zo door, je bent op de goede weg!',
 				'Jij bent echt geweldig bezig!',
-				'Je inzet wordt opgemerkt, ga zo door!',
-				'Dat is de spirit, blijf zo doorgaan!',
+				'Blijf zo doorgaan!',
 				'Je doet het voortreffelijk, hou vol!',
 				'Gewoonweg briljant!',
 				'Je bent echt goed bezig, ga door!',
@@ -162,8 +160,11 @@ export default {
 			return encouragements[Math.floor(Math.random() * encouragements.length)]
 		}
 	},
+	mounted() {
+		this.updateBucketsAccordingToDate();
+	},
 	methods: {
-		...mapActions(['setSelectedTables', 'unsetPerson', 'resetScore']),
+		...mapActions(['setSelectedTables', 'unsetPerson', 'resetScore', 'updateBucketsAccordingToDate']),
 		selectAll() {
 			this.selectedTables = [
 				2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
@@ -183,7 +184,7 @@ export default {
 			this.setSelectedTables(this.selectedTables);
 			this.$router.push({ path: '/play' });
 		},
-		score(item) {
+		stars(item) {
 			const buckets = this.values
 				.filter(
 					(v) =>

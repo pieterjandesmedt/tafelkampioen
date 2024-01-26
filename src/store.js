@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VuexPersistence from 'vuex-persist';
 import { intersection, difference } from 'ramda';
+import dayjs from 'dayjs';
 
 Vue.use(Vuex);
 
@@ -46,6 +47,10 @@ export default new Vuex.Store({
 				return median(state.progress[state.currentPerson].stopwatches) || 10000;
 			return 10000;
 		},
+		score: state => {
+			if (state.currentPerson && state.progress[state.currentPerson]) return state.progress[state.currentPerson].score || 0;
+			return 0;
+		}
 	},
 	mutations: {
 		addValue(state, value) {
@@ -61,6 +66,40 @@ export default new Vuex.Store({
 			};
 			state.progress[state.currentPerson].values.splice(index, 1, newValue);
 		},
+		setLastPracticedToToday(state) {
+			const today = dayjs().format('YYYY-MM-DD');
+			if (state.currentPerson && state.selectedTables.length) {
+				state.progress[state.currentPerson].values.forEach((value, index) => {
+					if (state.selectedTables.includes(parseInt(value.mul.split(' x ')[1], 10)))
+						Vue.set(state.progress[state.currentPerson].values[index], 'lastPracticed', today);
+				})
+			}
+		},
+		updateBucketsAccordingToDate(state) {
+			if (state.currentPerson) {
+				const today = dayjs();
+				state.progress[state.currentPerson].values.forEach((value, index) => {
+					const difference = today.diff(dayjs(value.lastPracticed || '2000-01-01'), 'day');
+					let maxBucket = 5;
+					if (difference === 1) maxBucket = 4;
+					if (difference > 1) maxBucket = 3;
+					if (difference > 5) maxBucket = 2;
+					if (difference > 13) maxBucket = 1;
+					if (difference > 21) maxBucket = 0;
+					Vue.set(state.progress[state.currentPerson].values[index], 'bucket', Math.min(value.bucket, maxBucket));
+				})
+			}
+		},
+		setScore(state, value) {
+			if (state.currentPerson) {
+				state.progress[state.currentPerson].score = value
+			}
+		},
+		addToScore(state, value) {
+			if (state.currentPerson) {
+				state.progress[state.currentPerson].score += value;
+			}
+		},
 		addPerson(state, value) {
 			if (!state.persons.find(p => p === value)) {
 				state.persons.push(value);
@@ -68,6 +107,7 @@ export default new Vuex.Store({
 					values: [],
 					currentIndex: 0,
 					stopwatches: [],
+					score: 0,
 				});
 			}
 		},
@@ -102,13 +142,12 @@ export default new Vuex.Store({
 	},
 	actions: {
 		addOne({ commit, state }) {
-			// what are the elements I want to practise?
-			const wantToPractise = intersection(order, state.selectedTables);
-			console.log('wantToPractise:', wantToPractise);
-			// select the difference between practised and wantToPractise
-			const practised = state.progress[state.currentPerson].values.map(v => v.table || parseInt(v.mul.split(' x ')[1], 10));
-			const diff = difference(wantToPractise, practised);
-			console.log('diff:', diff);
+			const today = dayjs().format('YYYY-MM-DD');
+			// what are the elements I want to practice?
+			const wantToPractice = intersection(order, state.selectedTables);
+			// select the difference between practiced and wantToPractice
+			const practiced = state.progress[state.currentPerson].values.map(v => v.table || parseInt(v.mul.split(' x ')[1], 10));
+			const diff = difference(wantToPractice, practiced);
 			// take the first element of the difference
 
 			const element = diff[0];
@@ -118,20 +157,29 @@ export default new Vuex.Store({
 						mul: `${index} x ${element}`,
 						table: element,
 						bucket: 0,
+						lastPracticed: today
 					});
 				}
 				commit('increaseIndex');
 			}
 		},
+		setLastPracticedToToday({ commit }) {
+			commit('setLastPracticedToToday');
+		},
+		updateBucketsAccordingToDate({ commit }) {
+			commit('updateBucketsAccordingToDate');
+		},
 		saveCorrectAnswer({ commit, state }, question) {
 			const index = state.progress[state.currentPerson].values.findIndex(v => v.mul === question);
 			const value = Math.max(state.progress[state.currentPerson].values[index].bucket + 1, 0);
 			commit('updateBucket', { index, value });
+			commit('addToScore', 10);
 		},
 		saveLateAnswer({ commit, state }, question) {
 			const index = state.progress[state.currentPerson].values.findIndex(v => v.mul === question);
 			const value = Math.max(state.progress[state.currentPerson].values[index].bucket - 2, 0);
 			commit('updateBucket', { index, value });
+			commit('addToScore', 5);
 		},
 		saveWrongAnswer({ commit, state }, question) {
 			const index = state.progress[state.currentPerson].values.findIndex(v => v.mul === question);

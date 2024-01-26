@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import PractiseTables from './views/PractiseTables.vue';
+import PracticeTables from './views/PracticeTables.vue';
 import ChoosePlayer from './views/ChoosePlayer.vue';
 import FinishPage from './views/FinishPage.vue';
 import SelectTables from './views/SelectTables.vue';
@@ -15,7 +15,7 @@ export default new Router({
 		{
 			path: '/play',
 			name: 'play',
-			component: PractiseTables,
+			component: PracticeTables,
 		},
 		{
 			path: '/',

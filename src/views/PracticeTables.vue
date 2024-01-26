@@ -56,7 +56,7 @@
 				</div>
 			</div>
 			<div class="points">
-				🏆 {{ points * 10 }} ⏱
+				🏆 {{ score }} ⏱
 				{{ Math.round(medianStopwatch / 100.0) / 10.0 }} s
 			</div>
 		</div>
@@ -109,16 +109,16 @@ export default {
 		};
 	},
 	computed: {
-		...mapGetters(['values', 'currentIndex', 'medianStopwatch']),
+		...mapGetters(['values', 'currentIndex', 'medianStopwatch', 'score']),
 		...mapState(['currentPerson', 'selectedTables']),
 		needsNew() {
 			return (
 				this.values
 					.filter((v) =>
 						this.selectedTables.find(
-							(sti) =>
-								sti === v.table ||
-								sti === parseInt(v.mul.split(' x ')[1], 10)
+							(selectedTable) =>
+								selectedTable === v.table ||
+								selectedTable === parseInt(v.mul.split(' x ')[1], 10)
 						)
 					)
 					.map((v) => v.bucket)
@@ -130,6 +130,7 @@ export default {
 		},
 	},
 	mounted() {
+		this.setLastPracticedToToday();
 		if (this.needsNew) this.addOne();
 		this.newQuestion();
 		this.$refs.answer.focus();
@@ -142,6 +143,7 @@ export default {
 			'saveWrongAnswer',
 			'unsetPerson',
 			'storeStopwatch',
+			'setLastPracticedToToday',
 		]),
 		isAnswerCorrect(mul, answer) {
 			const factors = mul.split(' x ');

@@ -9,7 +9,9 @@
 				<h1 class="is-size-2"><span class="is-hidden-touch">🏆</span> Welkom bij Tafelkampioen <span class="is-hidden-touch">🏆</span></h1>
 				<h4 class="is-size-4 mt-5">Wie wil er spelen?</h4>
 				<div v-for="person in persons" :key="person" class="login is-size-3">
-					<a @click="login(person)">{{ person }}</a>
+					<a @click="login(person)">{{ person }}
+						<span class="is-size-6">(🏆 {{ progress[person].score || 0 }})</span>
+					</a>
 				</div>
 				<div>
 					<button v-if="!showAdd" class="button is-text" @click="add">
@@ -23,6 +25,7 @@
 									v-model="newPerson"
 									class="input"
 									autofocus="true"
+									placeholder="Hoe heet je?"
 								/>
 							</p>
 							<p class="control">
@@ -64,12 +67,11 @@ export default {
 		};
 	},
 	computed: {
-		...mapState(['persons']),
+		...mapState(['persons', 'progress']),
 	},
 	methods: {
 		...mapActions(['setPerson', 'addPerson']),
 		login(person) {
-			console.log('person:', person);
 			this.setPerson(person);
 			this.$router.push({ path: '/select-tables' });
 		},
