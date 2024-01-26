@@ -1,30 +1,37 @@
 <template>
 	<section class="hero is-medium">
-		<div class="columns">
-			<div class="column">
+		<div class="columns is-mobile">
+			<div class="column is-narrow-touch">
 				<div class="logout has-text-left">
-					<button class="button is-small" @click="toSelect">&lt; Terug</button>
+					<button class="button is-small" @click="toSelect">&larr; <span class="is-hidden-touch">&nbsp;Terug</span></button>
 				</div>
 			</div>
 			<div class="column">
 				<progress-tables class="has-text-centered pt-3"></progress-tables>
 			</div>
-			<div class="column"></div>
+			<div class="column is-hidden-touch"></div>
 		</div>
-		<div class="hero-body has-text-centered">
+		<div class="hero-body py-0 has-text-centered">
 			<div class="">
 				<div class="question is-size-2" :class="{ wiggle: mistake }">
 					{{ currentQuestion }}
 				</div>
 				<form class="answer is-size-1" @submit.prevent="checkAnswer">
-					<input
-						ref="answer"
-						v-model="answer"
-						class="input is-size-1"
-						autofocus="true"
-						type="text" inputmode="numeric" pattern="[0-9]*"
-						x-webkit-speech
-					/>
+					<div class="field has-addons is-justify-content-center">
+						<div class="control">
+							<input
+								ref="answer"
+								v-model="answer"
+								class="input is-size-2 p-1"
+								autofocus="true"
+								type="text" inputmode="numeric" pattern="[0-9]*"
+								x-webkit-speech
+							/>
+						</div>
+						<div class="control">
+							<input type="submit" class="button is-info is-size-2 px-3" value="→" />
+						</div>
+					</div>
 				</form>
 				<div
 					class="is-size-1"
@@ -241,9 +248,9 @@ export default {
 	padding: 0.5em;
 }
 
-input {
+input[type='text'] {
 	text-align: center;
-	width: 5em;
+	width: 3.5em;
 }
 
 .tables {
@@ -252,10 +259,6 @@ input {
 }
 
 .hint {
-	margin-top: 1em;
-}
-
-.question {
 	margin-top: 1em;
 }
 
@@ -308,6 +311,7 @@ input {
 	position: relative;
 	transform: translate3d(0, -2em, 0);
 	animation: float-up 0.82s ease-out 0s infinite forwards;
+	z-index: 99;
 }
 
 .fade-enter-active,

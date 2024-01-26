@@ -2,9 +2,10 @@
 	<section class="hero is-fullheight">
 		<div class="hero-body">
 			<div class="container has-text-centered mb-6">
-				<h1 class="is-size-2">🏆 Welkom bij Tafelkampioen 🏆</h1>
-				<h4 class="is-size-4">Wie wil er spelen?</h4>
-				<div v-for="person in persons" :key="person" class="login">
+				<h1 class="is-size-2 is-hidden-desktop">🏆</h1>
+				<h1 class="is-size-2"><span class="is-hidden-touch">🏆</span> Welkom bij Tafelkampioen <span class="is-hidden-touch">🏆</span></h1>
+				<h4 class="is-size-4 mt-5">Wie wil er spelen?</h4>
+				<div v-for="person in persons" :key="person" class="login is-size-3">
 					<a @click="login(person)">{{ person }}</a>
 				</div>
 				<div>
@@ -19,18 +20,17 @@
 									v-model="newPerson"
 									class="input"
 									autofocus="true"
-									@blur="showAdd = false"
 								/>
 							</p>
 							<p class="control">
-								<a class="button is-static">⏎</a>
+								<input type="submit" class="button" value="⏎" :disabled="!newPerson"/>
 							</p>
 						</div>
 					</form>
 				</div>
-				<div class="export">
+				<!--div class="export">
 					<button class="button" @click="exportData">Export</button>
-				</div>
+				</div-->
 			</div>
 		</div>
 	</section>
@@ -74,6 +74,7 @@ export default {
 			if (this.newPerson) {
 				this.addPerson(this.newPerson);
 				this.setPerson(this.newPerson);
+				this.showAdd = false;
 				this.$router.push({ path: '/select-tables' });
 			}
 		},
@@ -92,7 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 .export {
-	position: absolute;
+	position: fixed;
 	bottom: 0;
 	right: 0;
 	padding: 0.5em;

@@ -1,23 +1,25 @@
 <template>
 	<section class="hero is-fullheight">
 		<div class="logout has-text-left">
-			<button class="button is-small" @click="logout">&lt; Iemand anders</button>
+			<button class="button is-small" @click="logout">&larr; <span class="is-hidden-touch">&nbsp;Iemand anders</span></button>
 		</div>
-		<div class="hero-body">
+		<div class="hero-body p-3">
 			<div class="container has-text-centered">
-				<h1 class="is-size-2">Welkom bij tafelkampioen, {{ currentPerson }}</h1>
+				<h1 class="is-size-3">Word jij Tafelkampioen, {{ currentPerson }}?</h1>
 				<div class="info has-bottom-margin">
-					<star-rating
+					<!--star-rating
 						:increment="0.5"
 						:star-size="32"
 						read-only
 						:rating="totalScore"
 						:show-rating="false"
-					></star-rating>
-					<p>
-						Je hebt 🏆 {{ points * 10 }} punten. Je vindt het antwoord
+					></star-rating-->
+					<p v-if="points > 0" class="mt-3">
+						Je hebt 🏆 {{ points * 10 }} punten verdiend.
+						<span v-if="medianStopwatch !== 10000">Je vindt het antwoord
 						gemiddeld binnen de ⏱
-						{{ Math.round(medianStopwatch / 100.0) / 10.0 }} seconden.
+						{{ Math.round(medianStopwatch / 100.0) / 10.0 }} seconden.</span>
+						{{ encouragement }}
 					</p>
 				</div>
 				<h4 class="is-size-4 has-top-margin">Welke tafels wil je oefenen?</h4>
@@ -122,6 +124,43 @@ export default {
 		points() {
 			return this.values.map((v) => v.bucket).reduce((p, c) => p + c, 0);
 		},
+		encouragement() {
+			const encouragements = [
+				'Goed bezig!',
+				'Dat doe je goed!',
+				'Oefening baart kunst!',
+				'Je doet het fantastisch!',
+				'Dat gaat goed!',
+				'Ga zo door!',
+				'Geweldig werk!',
+				'Top!',
+				'Trots op je!',
+				'Super!',
+				'Prima bezig!',
+				'Hou vol!',
+				'Je rockt!',
+				'Fantastisch!',
+				'Niet stoppen!',
+				'Klasse!',
+				'Ga ervoor!',
+				'Perfect!',
+				'Je maakt indruk!',
+				'Topprestatie!',
+				'Houd vol!',
+				'Geweldig gedaan!',
+				'Ga zo door, je bent op de goede weg!',
+				'Jij bent echt geweldig bezig!',
+				'Je inzet wordt opgemerkt, ga zo door!',
+				'Dat is de spirit, blijf zo doorgaan!',
+				'Je doet het voortreffelijk, hou vol!',
+				'Gewoonweg briljant!',
+				'Je bent echt goed bezig, ga door!',
+				'Fantastisch werk, je verdient het!',
+				'Je maakt vooruitgang, blijf gaan!',
+				'Trots op je, ga zo door!',
+			];
+			return encouragements[Math.floor(Math.random() * encouragements.length)]
+		}
 	},
 	methods: {
 		...mapActions(['setSelectedTables', 'unsetPerson', 'resetScore']),

@@ -1,7 +1,7 @@
 <template>
 	<section class="hero is-fullheight">
 		<div class="logout has-text-left">
-			<button class="button is-small" @click="toSelect">&lt; Terug</button>
+			<button class="button is-small" @click="toSelect">&larr; <span class="is-hidden-touch">&nbsp;Terug</span></button>
 		</div>
 		<div class="hero-body has-text-centered">
 			<div class="finish container">
